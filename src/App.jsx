@@ -1,24 +1,15 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { isBrowser, isMobile } from "react-device-detect";
+import MyRoute from './routes/MyRoute';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.jsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="h-[100vh]">
+      <div className="h-full">
+        { isBrowser && <h1>Browser is not support, go to mobile to enjoy</h1>}
+
+        { isMobile && <MyRoute />}
+      </div>
     </div>
   );
 }
