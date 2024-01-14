@@ -1,5 +1,6 @@
 import { useState } from "react";
-import Button from "../../components/Button";
+import Button from "@/components/Button";
+import { login } from "@/services/authService";
 
 const Login = () => {
   const [state, setState] = useState({
@@ -15,9 +16,18 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(state);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    login(state.email, state.password)
+      .then(() => {
+        console.log('Login Success')
+        // TO DO : Redirect to Home
+      })
+      .catch(error => {
+        console.error('Login error:', error.message);
+        // TO DO : Show error to user
+      })
   };
 
   return (
@@ -44,18 +54,18 @@ const Login = () => {
               Email address
             </label>
             <div className="mt-2">
-                <input
-                  value={state.email}
-                  onChange={handleInputChange}
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="Input email"
-                  required
-                  className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 leading-6"
-                />
-              </div>
+              <input
+                value={state.email}
+                onChange={handleInputChange}
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                placeholder="Input email"
+                required
+                className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 leading-6"
+              />
+            </div>
           </div>
 
           <div>
@@ -76,18 +86,19 @@ const Login = () => {
                 type="password"
                 autoComplete="current-password"
                 placeholder="Input password"
+                minLength={6}
                 required
                 className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 leading-6"
               />
             </div>
             <div className="text-sm text-right">
-                <a
-                  href="#"
-                  className="font-semibold text-indigo-600 hover:text-indigo-500"
-                >
-                  Forgot password?
-                </a>
-              </div>
+              <a
+                href="#"
+                className="font-semibold text-indigo-600 hover:text-indigo-500"
+              >
+                Forgot password?
+              </a>
+            </div>
           </div>
 
           <div>
@@ -103,7 +114,7 @@ const Login = () => {
             href="#"
             className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >
-            Start a 14 day free trial
+            Register
           </a>
         </p>
       </div>
