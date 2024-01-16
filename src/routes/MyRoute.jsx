@@ -4,6 +4,9 @@ import About from "../components/About";
 import Contact from "../components/Contact";
 import Login from "../pages/Auth/Login";
 import Error404 from "../components/404";
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "../services/authService";
+import NavBottom from "../components/NavBottom"
 
 const privateRoute = [
   {
@@ -13,6 +16,10 @@ const privateRoute = [
   {
     path: '/about',
     element: <About />
+  },
+  {
+    path: '/home',
+    element: <Home />
   },
   {
     path: '/contact',
@@ -36,29 +43,38 @@ const publicRoute = [
 ]
 
 export default function MyRoute() {
-  const isLogin = false
-  return (
-    <Routes>
-      {privateRoute.map(route => 
-        <Route
-          key={route.path}
-          path={route.path}
-          element={
-            <ProtectedRoute isLogin={isLogin}>
-              {route.element}
-            </ProtectedRoute>
-          }
-        />
-      )}
+  const [isLogin, setIsLogin] = useState(false);
 
-      {publicRoute.map(route => 
-        <Route
+  useEffect(() => {
+    getCurrentUser().then(() => setIsLogin(true))
+  }, []);
+
+  return (
+    <>
+      <Routes>
+        {privateRoute.map(route =>
+          <Route
             key={route.path}
             path={route.path}
-            element={route.element}
-        />
-      )}
-    </Routes>
+            element={
+              <ProtectedRoute isLogin={isLogin}>
+                {route.element}
+              </ProtectedRoute>
+            }
+          />
+        )}
+
+        {publicRoute.map(route =>
+          <Route
+              key={route.path}
+              path={route.path}
+              element={route.element}
+          />
+        )}
+      </Routes>
+
+      <NavBottom />
+    </>
   )
 }
 
@@ -73,4 +89,3 @@ const ProtectedRoute = ({
 
   return children;
 };
-  

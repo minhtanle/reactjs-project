@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from '@/configs/firebase';
 
 export const login = async (email, password) => {
@@ -6,8 +6,8 @@ export const login = async (email, password) => {
         .then(userCredential => userCredential.user)
         .then(async user => {
             // Store session
-            const idToken = await user.getIdToken();
-            setToken(idToken)
+            // const idToken = await user.getIdToken();
+            // setToken(idToken)
 
             return user;
         })
@@ -16,7 +16,20 @@ export const login = async (email, password) => {
         })
 }
 
-const setToken = (idToken) => {
-    sessionStorage.setItem('auth-token', idToken)
+export const logout = async () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+        return true;
+    }).catch(error => {
+        throw error
+    })
 }
 
+export const getCurrentUser = async () => {
+    const auth = await getAuth();
+    return auth.currentUser;
+};
+
+// const setToken = (idToken) => {
+    // sessionStorage.setItem('auth-token', idToken)
+// }
