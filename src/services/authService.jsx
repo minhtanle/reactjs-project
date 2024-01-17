@@ -5,10 +5,6 @@ export const login = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => userCredential.user)
         .then(async user => {
-            // Store session
-            // const idToken = await user.getIdToken();
-            // setToken(idToken)
-
             return user;
         })
         .catch(error => {
@@ -29,7 +25,3 @@ export const getCurrentUser = async () => {
     const auth = await getAuth();
     return auth.currentUser;
 };
-
-// const setToken = (idToken) => {
-    // sessionStorage.setItem('auth-token', idToken)
-// }

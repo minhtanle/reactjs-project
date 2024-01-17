@@ -1,6 +1,6 @@
 import { useEffect, useReducer } from "react"
 import { AuthContext, inititalState } from "./AuthContext"
-import { getCurrentUser } from "../services/authService"
+import { onAuthStateChanged, getAuth } from "firebase/auth"
 
 const AuthProvider = ({ children }) => {
     const reducerHandler = {
@@ -21,7 +21,7 @@ const AuthProvider = ({ children }) => {
             return {
                 ...state,
                 isAuthenticated: true,
-                // isLoading: true,
+                isLoading: false,
                 user
             }
         },
@@ -30,7 +30,7 @@ const AuthProvider = ({ children }) => {
             return {
                 ...state,
                 isAuthenticated: false,
-                // isLoading: true,
+                isLoading: false,
                 user: null
             }
         },
@@ -47,10 +47,16 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         (async () => {
-            const user = await getCurrentUser()
-            if (user) {
-                dispatch({ type: 'SIGN_IN', isAuthenticated: true, user })
-            }
+            dispatch({ type: 'INITIAL', isAuthenticated: false, user: null })
+
+            const auth = getAuth();
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    dispatch({ type: 'SIGN_IN', isAuthenticated: true, user })
+                } else {
+                    dispatch({ type: 'SIGN_OUT'})
+                }
+            });
         })();
     }, []);
 

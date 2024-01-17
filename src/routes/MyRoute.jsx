@@ -1,91 +1,75 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Home from "../components/Home";
+import { useRoutes } from "react-router-dom";
+import Home from "../pages/Home/Index";
+import Settings from "../pages/Settings/Index";
+import Profile from "../pages/Profile/Index";
 import About from "../components/About";
 import Contact from "../components/Contact";
 import Login from "../pages/Auth/Login";
 import Error404 from "../components/404";
-import { useEffect, useState } from "react";
-import { getCurrentUser } from "../services/authService";
-import NavBottom from "../components/NavBottom"
-
-const privateRoute = [
-  {
-    path: '/',
-    element: <Home />
-  },
-  {
-    path: '/about',
-    element: <About />
-  },
-  {
-    path: '/home',
-    element: <Home />
-  },
-  {
-    path: '/contact',
-    element: <Contact />
-  },
-]
-
-const publicRoute = [
-  {
-    path: '/login',
-    element: <Login />
-  },
-  {
-    path: '/404',
-    element: <Error404 />
-  },
-  {
-    path: '*',
-    element: <Navigate to='/404' />
-  }
-]
+import AuthGuard from "../guards/AuthGuard";
+import GuestGuard from "../guards/GuestGuard";
 
 export default function MyRoute() {
-  const [isLogin, setIsLogin] = useState(false);
-
-  useEffect(() => {
-    getCurrentUser().then(() => setIsLogin(true))
-  }, []);
-
-  return (
-    <>
-      <Routes>
-        {privateRoute.map(route =>
-          <Route
-            key={route.path}
-            path={route.path}
-            element={
-              <ProtectedRoute isLogin={isLogin}>
-                {route.element}
-              </ProtectedRoute>
-            }
-          />
-        )}
-
-        {publicRoute.map(route =>
-          <Route
-              key={route.path}
-              path={route.path}
-              element={route.element}
-          />
-        )}
-      </Routes>
-
-      <NavBottom />
-    </>
-  )
+  return useRoutes([
+    {
+      path: '*',
+      element: (
+        <Error404 />
+      )
+    },
+    {
+      path: '404',
+      element: (
+        <Error404 />
+      )
+    },
+    {
+      path: 'login',
+      element: (
+        <GuestGuard>
+          <Login />
+        </GuestGuard>
+      )
+    },
+    {
+      path: '/',
+      element: (
+        <AuthGuard>
+          <Home />
+        </AuthGuard>
+      )
+    },
+    {
+      path: 'contact',
+      element: (
+        <AuthGuard>
+          <Contact />
+        </AuthGuard>
+      )
+    },
+    {
+      path: 'about',
+      element: (
+        <AuthGuard>
+          <About />
+        </AuthGuard>
+      )
+    },
+    {
+      path: 'settings',
+      element: (
+        <AuthGuard>
+          <Settings />
+        </AuthGuard>
+      )
+    },
+    {
+      path: 'profile',
+      element: (
+        <AuthGuard>
+          <Profile />
+        </AuthGuard>
+      )
+    },
+  ])
 }
-
-const ProtectedRoute = ({
-  isLogin = false,
-  redirectPath = '/login',
-  children,
-}) => {
-  if (!isLogin) {
-    return <Navigate to={redirectPath} />;
-  }
-
-  return children;
-};

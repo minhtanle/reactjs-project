@@ -1,16 +1,16 @@
 import Button from "@/components/Button";
 import { login } from "@/services/authService";
-import { getCurrentUser, logout } from "../../services/authService";
-import useAuth from "../../hooks/useAuth";
-
+import { getCurrentUser } from "@/services/authService";
+import useAuth from "@/hooks/useAuth";
+import { useState } from "react";
 
 const Login = () => {
-  const { dispatch } = useAuth()
-
   const [state, setState] = useState({
     email: "",
     password: ""
   });
+
+  const { dispatch } = useAuth()
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -23,17 +23,15 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    dispatch({ type: 'INITIAL', isAuthenticated: false, user: null })
+
     login(state.email, state.password)
       .then(async () => {
         const user = await getCurrentUser()
         dispatch({ type: 'SIGN_IN', isAuthenticated: true, user })
-
-        console.log('Login Success')
-        // TO DO : Redirect to Home
-        // console.log(getCurrentUser())
       })
-      .catch(error => {
-        console.error('Login error:', error.message);
+      .catch(() => {
+        dispatch({ type: 'SIGN_OUT' })
         // TO DO : Show error to user
       })
   };
