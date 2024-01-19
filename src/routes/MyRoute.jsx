@@ -8,68 +8,73 @@ import Login from "../pages/Auth/Login";
 import Error404 from "../components/404";
 import AuthGuard from "../guards/AuthGuard";
 import GuestGuard from "../guards/GuestGuard";
+import Register from "../pages/Auth/Register";
 
 export default function MyRoute() {
   return useRoutes([
     {
-      path: '*',
-      element: (
-        <Error404 />
-      )
+      path: "*",
+      element: <Error404 />,
     },
     {
-      path: '404',
-      element: (
-        <Error404 />
-      )
+      path: "404",
+      element: <Error404 />,
     },
     {
-      path: 'login',
+      path: "login",
       element: (
         <GuestGuard>
           <Login />
         </GuestGuard>
-      )
+      ),
     },
     {
-      path: '/',
+      path: "register",
+      element: (
+        <GuestGuard>
+          <Register />
+        </GuestGuard>
+      ),
+    },
+    {
+      path: "/",
       element: (
         <AuthGuard>
           <Home />
         </AuthGuard>
-      )
+      ),
     },
     {
-      path: 'contact',
+      path: "contact",
       element: (
         <AuthGuard>
           <Contact />
         </AuthGuard>
-      )
+      ),
     },
     {
-      path: 'about',
+      path: "about",
       element: (
         <AuthGuard>
           <About />
         </AuthGuard>
-      )
+      ),
     },
     {
-      path: 'settings',
+      path: "settings",
       element: (
         <AuthGuard>
           <Settings />
         </AuthGuard>
-      )
+      ),
     },
     {
-      path: 'profile',
+      path: "profile",
       element: (
         <AuthGuard>
           <Profile />
         </AuthGuard>
-      )
+      ),
     },
-  ])
+  ]);
 }

@@ -1,10 +1,10 @@
-import { getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from '@/configs/firebase';
 
 export const login = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => userCredential.user)
-        .then(async user => {
+        .then(user => {
             return user;
         })
         .catch(error => {
@@ -13,12 +13,19 @@ export const login = async (email, password) => {
 }
 
 export const logout = async () => {
-    const auth = getAuth();
     signOut(auth).then(() => {
         return true;
     }).catch(error => {
         throw error
     })
+}
+
+export const register = async (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password)
+        .then(() => true)
+        .catch((error) => {
+            throw error
+        });
 }
 
 export const getCurrentUser = async () => {

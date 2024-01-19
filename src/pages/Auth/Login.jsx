@@ -1,39 +1,31 @@
-import Button from "@/components/Button";
 import { login } from "@/services/authService";
-import { getCurrentUser } from "@/services/authService";
-import useAuth from "@/hooks/useAuth";
 import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [state, setState] = useState({
     email: "",
-    password: ""
+    password: "",
   });
-
-  const { dispatch } = useAuth()
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setState((prevProps) => ({
       ...prevProps,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    dispatch({ type: 'INITIAL', isAuthenticated: false, user: null })
+    login(state.email, state.password).catch((error) => {
+      const { code } = error;
+      const errorMessage = code.split("/")[1].replaceAll("-", " ");
 
-    login(state.email, state.password)
-      .then(async () => {
-        const user = await getCurrentUser()
-        dispatch({ type: 'SIGN_IN', isAuthenticated: true, user })
-      })
-      .catch(() => {
-        dispatch({ type: 'SIGN_OUT' })
-        // TO DO : Show error to user
-      })
+      toast.warn(errorMessage);
+    });
   };
 
   return (
@@ -97,7 +89,7 @@ const Login = () => {
                 className="block w-full rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 leading-6"
               />
             </div>
-            <div className="text-sm text-right">
+            <div className="text-sm text-right hidden">
               <a
                 href="#"
                 className="font-semibold text-indigo-600 hover:text-indigo-500"
@@ -108,20 +100,23 @@ const Login = () => {
           </div>
 
           <div>
-            <Button type="submit" className="w-full text-white" btnStyle="primary">
+            <button
+              type="submit"
+              className="w-full text-white btn btn-primary py-1.5"
+            >
               Sign in
-            </Button>
+            </button>
           </div>
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Not a member?{" "}
-          <a
-            href="#"
-            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          <NavLink
+            to="/register"
+            className="font-semibold leading-6 text-sky-600 hover:text-sky-500"
           >
             Register
-          </a>
+          </NavLink>
         </p>
       </div>
     </div>

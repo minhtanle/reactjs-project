@@ -1,4 +1,6 @@
-const Error404 = () => {
+import { memo } from 'react';
+
+const Error404 = memo(() => {
   return(
     <section>
       <div style={{color: "red"}}>
@@ -6,6 +8,6 @@ const Error404 = () => {
       </div>
     </section>
   )    
-}
+})
 
 export default Error404
