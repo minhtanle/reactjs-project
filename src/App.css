@@ -18,14 +18,19 @@
     }
 }
 
-
 @tailwind components;
 @tailwind utilities;
 
+*:not(input):not(textarea):not(select) {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
 .nav-bottom a.active svg {
-    color: rgb(37 99 235)
+  color: rgb(37 99 235);
 }
 
 .nav-bottom a.active span {
-    color: rgb(37 99 235)
+  color: rgb(37 99 235);
 }

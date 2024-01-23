@@ -1,29 +1,27 @@
 import "./App.css";
-import "react-toastify/dist/ReactToastify.css";
 import { isBrowser, isMobile } from "react-device-detect";
 import MyRoute from "./routes/MyRoute";
-import NavBottom from "@/components/NavBottom";
+import NavBottom from "./components/NavBottom";
 import useAuth from "./hooks/useAuth";
-import { ToastContainer } from "react-toastify";
 
 const App = () => {
   const { isAuthenticated } = useAuth();
   return (
-    <div className="h-[95vh]">
-      <div className="h-full">
-        {isBrowser && <h1>Browser is not support, go to mobile to enjoy</h1>}
+    <>
+      {isBrowser && <h1>Browser is not support, go to mobile to enjoy</h1>}
 
-        {isMobile && (
-          <>
-            <MyRoute />
+      <div className="h-[calc(100vh-80px)]">
+        <div className={isAuthenticated ? "h-full p-2" : "h-full"}>
+          {isMobile && (
+            <>
+              <MyRoute />
 
-            {isAuthenticated && <NavBottom />}
-          </>
-        )}
-
-        <ToastContainer />
+              {isAuthenticated && <NavBottom />}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
