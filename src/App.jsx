@@ -11,7 +11,7 @@ const App = () => {
       {isBrowser && <h1>Browser is not support, go to mobile to enjoy</h1>}
 
       <div className="h-[calc(100vh-80px)]">
-        <div className={isAuthenticated ? "h-full p-2" : "h-full"}>
+        <div className={isAuthenticated ? "h-full p-2 overflow-y-scroll" : "h-full"}>
           {isMobile && (
             <>
               <MyRoute />

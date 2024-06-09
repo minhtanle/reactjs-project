@@ -2,7 +2,7 @@ import { useRoutes } from "react-router-dom";
 import Home from "../pages/Home/Index";
 import Settings from "../pages/Settings/Index";
 import Profile from "../pages/Profile/Index";
-import About from "../components/About";
+import Vocabulary from "../pages/Vocabulary/Index";
 import Contact from "../components/Contact";
 import Login from "../pages/Auth/Login";
 import Error404 from "../components/404";
@@ -53,10 +53,10 @@ export default function MyRoute() {
       ),
     },
     {
-      path: "about",
+      path: "vocabulary",
       element: (
         <AuthGuard>
-          <About />
+          <Vocabulary />
         </AuthGuard>
       ),
     },
