@@ -24,3 +24,7 @@ npm run start
 npm run build
 ```
 
+### build gh-page
+```
+npm run deploy
+```
