@@ -1,10 +1,12 @@
-import { addDoc, collection, getDocs, getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc, setDoc, query, orderBy } from "firebase/firestore";
 import { fileStore as db } from "@/configs/firebase";
 
 const collectionName = "vocabularies";
 
 export const getVocabularies = async () => {
-    const querySnapshot = await getDocs(collection(db, collectionName));
+    const q = query(collection(db, collectionName), orderBy("created_at"));
+
+    const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((doc) => doc.data());
 }
 
@@ -19,6 +21,7 @@ export const addVocabulary = async (word, mean) => {
         await setDoc(doc(db, collectionName, word), {
             word: word,
             mean: mean,
+            created_at: new Date()
         });
         return true;
     }
