@@ -4,7 +4,6 @@ import {
   getVocabularies,
 } from "../../services/vocabularyService";
 import { toast } from "react-toastify";
-import { set } from "firebase/database";
 
 const Vocabulary = () => {
   const [state, setState] = useState({
@@ -33,7 +32,7 @@ const Vocabulary = () => {
     e.preventDefault();
     const result = await addVocabulary(state.word, state.mean);
     if (result) {
-      setVocabularies([...vocabularies, state]);
+      setVocabularies([state, ...vocabularies]);
     } else {
       toast.warn('Word is already exist');
     }

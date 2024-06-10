@@ -4,7 +4,7 @@ import { fileStore as db } from "@/configs/firebase";
 const collectionName = "vocabularies";
 
 export const getVocabularies = async () => {
-    const q = query(collection(db, collectionName), orderBy("created_at"));
+    const q = query(collection(db, collectionName), orderBy("created_at", 'desc'));
 
     const querySnapshot = await getDocs(q);
     return querySnapshot.docs.map((doc) => doc.data());
