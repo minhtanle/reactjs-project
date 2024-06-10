@@ -3,6 +3,8 @@ import { isBrowser, isMobile } from "react-device-detect";
 import MyRoute from "./routes/MyRoute";
 import NavBottom from "./components/NavBottom";
 import useAuth from "./hooks/useAuth";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const { isAuthenticated } = useAuth();
@@ -19,6 +21,8 @@ const App = () => {
               {isAuthenticated && <NavBottom />}
             </>
           )}
+
+          <ToastContainer stacked  limit={3} />
         </div>
       </div>
     </>
