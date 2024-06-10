@@ -133,7 +133,7 @@ const Vocabulary = () => {
         <table className="table">
           <thead>
             <tr>
-              <th className="text-lg">Word</th>
+              <th className="text-lg" width="40%">Word</th>
               <th className="text-lg">Phonetic</th>
               <th className="text-lg">Mean</th>
               <th></th>
@@ -143,11 +143,11 @@ const Vocabulary = () => {
             {vocabularies.map((item) => (
               <tr key={item.word}>
                 <td
-                  className="text-lg"
+                  className="text-lg py-1"
                   onClick={() => playaudio(item.pronunciation ?? "")}
                 >
                   {item.word} <br></br>
-                  {item.phonetic}
+                  <span className="text-sm italic">{item.phonetic}</span>
                 </td>
                 <td className="text-lg">{item.mean}</td>
                 <td onClick={() => showUpdateModal(item)}>
