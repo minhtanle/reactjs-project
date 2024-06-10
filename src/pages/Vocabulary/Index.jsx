@@ -38,7 +38,7 @@ const Vocabulary = () => {
     if (!wordDetail) {
       toast.warn("Word not found");
     } else {
-      const { word, phonetic, phonetics } = wordDetail[0];
+      const { word, phonetic = '', phonetics } = wordDetail[0];
 
       let audioInfo = phonetics.filter((item) =>
         item.audio.endsWith("-us.mp3")
