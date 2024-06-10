@@ -134,8 +134,8 @@ const Vocabulary = () => {
           <thead>
             <tr>
               <th className="text-lg" width="40%">Word</th>
-              <th className="text-lg">Phonetic</th>
               <th className="text-lg">Mean</th>
+              <th className="text-lg" width="5%"></th>
               <th></th>
             </tr>
           </thead>
@@ -149,7 +149,7 @@ const Vocabulary = () => {
                   {item.word} <br></br>
                   <span className="text-sm italic">{item.phonetic}</span>
                 </td>
-                <td className="text-lg">{item.mean}</td>
+                <td className="text-md">{item.mean}</td>
                 <td onClick={() => showUpdateModal(item)}>
                   <box-icon type="solid" name="edit-alt"></box-icon>
                 </td>
