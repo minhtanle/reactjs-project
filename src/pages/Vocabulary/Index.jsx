@@ -41,9 +41,9 @@ const Vocabulary = () => {
       const { word, phonetic, phonetics } = wordDetail[0];
 
       let audioInfo = phonetics.filter((item) =>
-        item.audio.endsWith('-us.mp3')
+        item.audio.endsWith("-us.mp3")
       );
-      let pronunciation = audioInfo[0].audio ?? "";
+      let pronunciation = audioInfo?.[0]?.audio ?? "";
 
       const result = await addVocabulary(
         word,
@@ -54,7 +54,7 @@ const Vocabulary = () => {
       if (result) {
         state.phonetic = phonetic;
         state.pronunciation = pronunciation;
-        
+
         let newList = vocabularies.filter((item) => item.word !== state.word);
         setVocabularies([state, ...newList]);
       } else {
@@ -133,7 +133,9 @@ const Vocabulary = () => {
         <table className="table">
           <thead>
             <tr>
-              <th className="text-lg" width="40%">Word</th>
+              <th className="text-lg" width="40%">
+                Word
+              </th>
               <th className="text-lg">Mean</th>
               <th className="text-lg" width="5%"></th>
               <th></th>
