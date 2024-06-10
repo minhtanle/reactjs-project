@@ -4,11 +4,14 @@ import {
   getVocabularies,
 } from "../../services/vocabularyService";
 import { toast } from "react-toastify";
+import { searchWord } from "../../services/dictionaryService";
 
 const Vocabulary = () => {
   const [state, setState] = useState({
     word: "",
     mean: "",
+    phonetic: "",
+    pronunciation: "",
   });
 
   const [vocabularies, setVocabularies] = useState([]);
@@ -30,15 +33,48 @@ const Vocabulary = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await addVocabulary(state.word, state.mean);
-    if (result) {
-      setVocabularies([state, ...vocabularies]);
+
+    const wordDetail = await searchWord(state.word);
+    if (!wordDetail) {
+      toast.warn("Word not found");
     } else {
-      toast.warn('Word is already exist');
+      const { word, phonetic, phonetics } = wordDetail[0];
+
+      let audioInfo = phonetics.filter((item) =>
+        item.audio.endsWith('-us.mp3')
+      );
+      let pronunciation = audioInfo[0].audio ?? "";
+
+      const result = await addVocabulary(
+        word,
+        state.mean,
+        phonetic,
+        pronunciation
+      );
+      if (result) {
+        state.phonetic = phonetic;
+        state.pronunciation = pronunciation;
+        
+        let newList = vocabularies.filter((item) => item.word !== state.word);
+        setVocabularies([state, ...newList]);
+      } else {
+        toast.warn("Word is already exist");
+      }
+      // Hide modal
+      setState({ word: "", mean: "" });
+      document.getElementById("my_modal_1").close();
     }
-    // Hide modal
-    setState({ word: "", mean: "" })
-    document.getElementById("my_modal_1").close();
+  };
+
+  const playaudio = (url) => {
+    if (!url) return;
+    let audio = new Audio(url);
+    audio.play();
+  };
+
+  const showUpdateModal = (item) => {
+    setState(item);
+    document.getElementById("my_modal_1").showModal();
   };
 
   return (
@@ -97,15 +133,26 @@ const Vocabulary = () => {
         <table className="table">
           <thead>
             <tr>
-              <th>Word</th>
-              <th>Mean</th>
+              <th className="text-lg">Word</th>
+              <th className="text-lg">Phonetic</th>
+              <th className="text-lg">Mean</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             {vocabularies.map((item) => (
               <tr key={item.word}>
-                <td>{item.word}</td>
-                <td>{item.mean}</td>
+                <td
+                  className="text-lg"
+                  onClick={() => playaudio(item.pronunciation ?? "")}
+                >
+                  {item.word} <br></br>
+                  {item.phonetic}
+                </td>
+                <td className="text-lg">{item.mean}</td>
+                <td onClick={() => showUpdateModal(item)}>
+                  <box-icon type="solid" name="edit-alt"></box-icon>
+                </td>
               </tr>
             ))}
           </tbody>
